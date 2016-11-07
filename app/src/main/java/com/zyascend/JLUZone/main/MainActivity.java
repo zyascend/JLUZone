@@ -75,6 +75,7 @@ public class MainActivity extends BaseFragmentActivity implements OnTabReselectL
         Log.d(TAG, "onTabReSelected: ");
         switch (tabId){
             case R.id.tab_main:
+                setToolbarTitle("知吉");
                 Log.d(TAG, "onTabReSelected: main");
                 ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),new MainFragment());
                 break;

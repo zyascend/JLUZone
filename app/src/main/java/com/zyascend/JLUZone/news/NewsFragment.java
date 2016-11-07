@@ -186,8 +186,8 @@ public class NewsFragment extends BaseFragment<NewsContract.View, NewsPresenter>
                 newsList.remove(i);
             }
         }
-        mList = newsList;
-        adapter.setList(mList);
+        mList.addAll(newsList);
+        adapter.setList(newsList);
     }
 
     @Override
