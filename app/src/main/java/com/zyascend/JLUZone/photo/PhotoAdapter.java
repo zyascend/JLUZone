@@ -17,6 +17,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
+ *
+ *
  * Created by Administrator on 2016/8/6.
  */
 public class PhotoAdapter extends BaseReAdapter {

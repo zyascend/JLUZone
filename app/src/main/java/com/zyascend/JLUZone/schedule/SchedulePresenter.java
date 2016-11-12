@@ -7,11 +7,11 @@ import android.widget.HorizontalScrollView;
 import com.zyascend.JLUZone.base.BasePresenter;
 import com.zyascend.JLUZone.entity.Course;
 import com.zyascend.JLUZone.entity.Term;
-import com.zyascend.JLUZone.main.MainContract;
+import com.zyascend.JLUZone.http.OkHttpUtils;
 import com.zyascend.JLUZone.model.data.DataListener;
 import com.zyascend.JLUZone.model.data.DataUtils;
-import com.zyascend.JLUZone.model.net.HttpUtils;
-import com.zyascend.JLUZone.model.net.HttpUtilsListener;
+import com.zyascend.JLUZone.model.net.HttpManager;
+import com.zyascend.JLUZone.model.net.HttpManagerListener;
 import com.zyascend.JLUZone.utils.ActivityUtils;
 import com.zyascend.JLUZone.utils.ShareUtils;
 
@@ -27,10 +27,10 @@ implements ScheduleConstract.Presenter{
     private static final String TAG = "TAG_SchedulePresenter";
     private final Context mContext;
     private DataListener mDataUtils;
-    private HttpUtilsListener mHttpUtils;
+    private HttpManagerListener mHttpUtils;
 
     public SchedulePresenter(Context context) {
-        mHttpUtils = HttpUtils.getInstance();
+        mHttpUtils = HttpManager.getInstance();
         mDataUtils = DataUtils.getInstance(context.getApplicationContext());
         mContext = context;
     }
@@ -39,7 +39,7 @@ implements ScheduleConstract.Presenter{
     @Override
     public void loadTermList() {
         //先从网络中获取
-        mHttpUtils.getSemester(new HttpUtilsListener.TermCallBack() {
+        mHttpUtils.getSemester(this,new HttpManagerListener.TermCallBack() {
             @Override
             public void onSuccess(List<Term> terms) {
                 if (!isViewAttached()){
@@ -114,7 +114,7 @@ implements ScheduleConstract.Presenter{
     }
 
     private void loadScheduleFromNet(final int termId) {
-        mHttpUtils.getSchedule(termId, new HttpUtilsListener.ScheduleCallBack() {
+        mHttpUtils.getSchedule(this,termId, new HttpManagerListener.ScheduleCallBack() {
             @Override
             public void onSuccess(List<Course> courses) {
 
@@ -144,8 +144,9 @@ implements ScheduleConstract.Presenter{
     @Override
     public void detachView() {
         super.detachView();
-        mHttpUtils.cancel();
         mDataUtils = null;
         mHttpUtils = null;
+        OkHttpUtils.getInstance().cancelTag(this);
+
     }
 }

@@ -11,7 +11,7 @@ import com.zyascend.JLUZone.base.BasePresenter;
 import com.zyascend.JLUZone.entity.StuInfo;
 import com.zyascend.JLUZone.login.LoginActivity;
 import com.zyascend.JLUZone.model.data.DataUtils;
-import com.zyascend.JLUZone.model.net.HttpUtilsListener;
+import com.zyascend.JLUZone.model.net.HttpManagerListener;
 import com.zyascend.JLUZone.utils.CacheCleanUtils;
 
 import java.io.File;
@@ -66,7 +66,7 @@ public class UserPresenter extends BasePresenter<UserContract.View> implements U
 
     @Override
     public void loadUserName() {
-        mDataUtils.getStuInfo(new HttpUtilsListener.LoginCallBack() {
+        mDataUtils.getStuInfo(new HttpManagerListener.LoginCallBack() {
             @Override
             public void onSuccess(StuInfo stuInfo) {
                 if (stuInfo != null){

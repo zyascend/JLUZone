@@ -3,6 +3,7 @@ package com.zyascend.JLUZone.score;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -86,7 +87,6 @@ public class ScoreDetailActivity extends BaseActivity<ScoreContract.View, ScoreP
 
     @Override
     protected void loadFragment() {
-
     }
 
     @Override
@@ -136,7 +136,7 @@ public class ScoreDetailActivity extends BaseActivity<ScoreContract.View, ScoreP
             String[] titles = new String[5];
             List<ScoreDetail.ItemsBean> itemsBeen = detail.getItems();
             if (itemsBeen == null){
-                showFailure();
+//                showFailure();
                 return;
             }
 
@@ -177,7 +177,7 @@ public class ScoreDetailActivity extends BaseActivity<ScoreContract.View, ScoreP
 
     @Override
     public void showFailure() {
-        Toast.makeText(this, "加载失败，请检查网络后重试", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "加载失败，请检查网络后重试", Toast.LENGTH_SHORT).show();
     }
 
     @Override

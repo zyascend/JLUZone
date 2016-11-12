@@ -5,10 +5,11 @@ import android.util.Log;
 
 import com.zyascend.JLUZone.base.BasePresenter;
 import com.zyascend.JLUZone.entity.StuInfo;
+import com.zyascend.JLUZone.http.OkHttpUtils;
 import com.zyascend.JLUZone.model.data.DataListener;
 import com.zyascend.JLUZone.model.data.DataUtils;
-import com.zyascend.JLUZone.model.net.HttpUtils;
-import com.zyascend.JLUZone.model.net.HttpUtilsListener;
+import com.zyascend.JLUZone.model.net.HttpManager;
+import com.zyascend.JLUZone.model.net.HttpManagerListener;
 
 
 /**
@@ -18,12 +19,12 @@ import com.zyascend.JLUZone.model.net.HttpUtilsListener;
 public class LoginPresenter extends BasePresenter<LoginContract.View>implements LoginContract.Presenter {
     private static final String TAG = "TAG_LoginPresenter";
     private DataListener mDataListener;
-    private HttpUtilsListener mHttpUtils;
+    private HttpManagerListener mHttpUtils;
     private StuInfo mStuinfo;
 
     public LoginPresenter (Context context){
         mDataListener = DataUtils.getInstance(context.getApplicationContext());
-        mHttpUtils = HttpUtils.getInstance();
+        mHttpUtils = HttpManager.getInstance();
     }
 
 
@@ -34,7 +35,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>implements 
 
     @Override
     public void getStuInfo() {
-        mDataListener.getStuInfo(new HttpUtilsListener.LoginCallBack() {
+        mDataListener.getStuInfo(new HttpManagerListener.LoginCallBack() {
             @Override
             public void onSuccess(StuInfo stuInfo) {
                 mViewListener.loadStuInfo(stuInfo);
@@ -50,8 +51,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>implements 
     public void login(StuInfo stuInfo) {
         mStuinfo = stuInfo;
         mViewListener.showLoginProgress();
-        mHttpUtils.login(stuInfo.getIsLoginOutside(), stuInfo.getAccount()
-                , stuInfo.getPassWord(), new HttpUtilsListener.LoginCallBack() {
+        mHttpUtils.login(this,stuInfo.getIsLoginOutside(), stuInfo.getAccount()
+                , stuInfo.getPassWord(), new HttpManagerListener.LoginCallBack() {
             @Override
             public void onSuccess(StuInfo stuInfo) {
                 Log.d(TAG, "onSuccess: ");
@@ -83,5 +84,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>implements 
 //        mHttpUtils.cancel();
         mViewListener = null;
         mHttpUtils = null;
+        OkHttpUtils.getInstance().cancelTag(this);
+
     }
 }

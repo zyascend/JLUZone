@@ -1,5 +1,7 @@
 package com.zyascend.JLUZone.base;
 
+import com.zyascend.JLUZone.http.OkHttpUtils;
+
 /**
  *
  * Created by Administrator on 2016/7/6.

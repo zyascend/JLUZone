@@ -121,14 +121,14 @@ public class NewsPresenter extends BasePresenter<NewsContract.View>
     @Override
     public void onFailure(Exception e) {
         Log.d(TAG, "onFailure: "+e.toString());
-//        List<News> newsList = mData.getAllNews();
-//       if (ActivityUtils.NotNullOrEmpty(mData.getAllNews())){
-//           mViewListener.loadNews(mData.getAllNews());
-//       }else {
-//           mViewListener.showFailure();
-//       }
 
     }
 
 
+    @Override
+    public void detachView() {
+        super.detachView();
+        mData = null;
+        mJouspUtils = null;
+    }
 }

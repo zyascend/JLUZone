@@ -1,7 +1,6 @@
 package com.zyascend.JLUZone.model.data;
 
 import com.zyascend.JLUZone.entity.Course;
-import com.zyascend.JLUZone.entity.Editor;
 import com.zyascend.JLUZone.entity.Job;
 import com.zyascend.JLUZone.entity.MainImage;
 import com.zyascend.JLUZone.entity.News;
@@ -9,8 +8,7 @@ import com.zyascend.JLUZone.entity.StuInfo;
 import com.zyascend.JLUZone.entity.Score;
 import com.zyascend.JLUZone.entity.Term;
 import com.zyascend.JLUZone.entity.Todo;
-import com.zyascend.JLUZone.login.LoginActivity;
-import com.zyascend.JLUZone.model.net.HttpUtilsListener;
+import com.zyascend.JLUZone.model.net.HttpManagerListener;
 
 import java.util.List;
 
@@ -21,7 +19,7 @@ import java.util.List;
 public interface DataListener {
     void saveStuInfo(StuInfo stuInfo);
 
-    void getStuInfo(HttpUtilsListener.LoginCallBack callBack);
+    void getStuInfo(HttpManagerListener.LoginCallBack callBack);
 
     void saveSchedule(Course course);
 

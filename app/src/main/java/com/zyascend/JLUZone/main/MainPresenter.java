@@ -9,12 +9,11 @@ import com.zyascend.JLUZone.entity.MainImage;
 import com.zyascend.JLUZone.entity.StuInfo;
 import com.zyascend.JLUZone.entity.Todo;
 import com.zyascend.JLUZone.entity.Weather;
+import com.zyascend.JLUZone.http.OkHttpUtils;
 import com.zyascend.JLUZone.model.data.DataListener;
 import com.zyascend.JLUZone.model.data.DataUtils;
-import com.zyascend.JLUZone.model.net.HttpUtils;
-import com.zyascend.JLUZone.model.net.HttpUtilsListener;
-import com.zyascend.JLUZone.model.net.JsoupListener;
-import com.zyascend.JLUZone.model.net.JsoupUtils;
+import com.zyascend.JLUZone.model.net.HttpManager;
+import com.zyascend.JLUZone.model.net.HttpManagerListener;
 
 import java.util.Calendar;
 import java.util.List;
@@ -29,12 +28,12 @@ public class MainPresenter extends BasePresenter<MainContract.View>
 
     private DataListener mDataUtils;
     private static final String TAG = "TAG_MainPresenter";
-    private HttpUtilsListener mHttp;
+    private HttpManagerListener mHttp;
     private int termId;
 
     public MainPresenter(Context context) {
         mDataUtils = DataUtils.getInstance(context.getApplicationContext());
-        mHttp = HttpUtils.getInstance();
+        mHttp = HttpManager.getInstance();
     }
 
     @Override
@@ -46,7 +45,7 @@ public class MainPresenter extends BasePresenter<MainContract.View>
 
     @Override
     public void loadWeather() {
-        mHttp.getWeather(new HttpUtilsListener.WeatherCallback() {
+        mHttp.getWeather(this,new HttpManagerListener.WeatherCallback() {
             @Override
             public void onSuccess(Weather weather) {
 
@@ -72,7 +71,7 @@ public class MainPresenter extends BasePresenter<MainContract.View>
         int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         int realDay = getRealDay(day,currentDay);
 
-        mDataUtils.getStuInfo(new HttpUtilsListener.LoginCallBack() {
+        mDataUtils.getStuInfo(new HttpManagerListener.LoginCallBack() {
             @Override
             public void onSuccess(StuInfo stuInfo) {
                 if (stuInfo != null){
@@ -126,7 +125,7 @@ public class MainPresenter extends BasePresenter<MainContract.View>
     @Override
     public void detachView() {
         super.detachView();
-        mHttp.cancel();
+        OkHttpUtils.getInstance().cancelTag(this);
         mHttp = null;
         mDataUtils = null;
     }

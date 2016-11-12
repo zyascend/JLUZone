@@ -3,12 +3,10 @@ package com.zyascend.JLUZone.model.data;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.MediaMetadata;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.zyascend.JLUZone.entity.ConstValue;
 import com.zyascend.JLUZone.entity.Course;
 import com.zyascend.JLUZone.entity.CourseDao;
@@ -31,10 +29,9 @@ import com.zyascend.JLUZone.entity.TermDao;
 import com.zyascend.JLUZone.entity.Todo;
 import com.zyascend.JLUZone.entity.TodoDao;
 import com.zyascend.JLUZone.entity.ImageValue;
-import com.zyascend.JLUZone.model.net.HttpUtilsListener;
+import com.zyascend.JLUZone.model.net.HttpManagerListener;
 import com.zyascend.JLUZone.utils.ActivityUtils;
 
-import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +80,7 @@ public class DataUtils implements DataListener {
     }
 
     @Override
-    public void getStuInfo(HttpUtilsListener.LoginCallBack callBack) {
+    public void getStuInfo(HttpManagerListener.LoginCallBack callBack) {
         StuInfoDao dao = daoSession.getStuInfoDao();
         StuInfo info = new StuInfo();
         try {

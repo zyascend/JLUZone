@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 
+import com.zyascend.JLUZone.http.OkHttpUtils;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -23,7 +24,9 @@ public class BaseApplication extends Application {
         context = this;
 //        refWatcher = LeakCanary.install(this);
         JPushInterface.init(this);
-
+        OkHttpUtils.init(this);
+        OkHttpUtils.getInstance()
+                .build();
     }
 
 

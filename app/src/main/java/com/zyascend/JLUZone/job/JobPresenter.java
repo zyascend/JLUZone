@@ -7,9 +7,10 @@ import com.zyascend.JLUZone.base.BasePresenter;
 import com.zyascend.JLUZone.entity.ConstValue;
 import com.zyascend.JLUZone.entity.Job;
 import com.zyascend.JLUZone.entity.JobContent;
+import com.zyascend.JLUZone.http.OkHttpUtils;
 import com.zyascend.JLUZone.model.data.DataUtils;
-import com.zyascend.JLUZone.model.net.HttpUtils;
-import com.zyascend.JLUZone.model.net.HttpUtilsListener;
+import com.zyascend.JLUZone.model.net.HttpManager;
+import com.zyascend.JLUZone.model.net.HttpManagerListener;
 import com.zyascend.JLUZone.utils.ActivityUtils;
 
 import java.util.List;
@@ -20,14 +21,14 @@ import java.util.List;
  */
 
 public class JobPresenter extends BasePresenter<JobContract.View> implements JobContract.Presenter
-        , HttpUtilsListener.JobListCallback
+        , HttpManagerListener.JobListCallback
         {
-    private HttpUtils httpUtils;
+    private HttpManager httpUtils;
     private DataUtils dataUtils;
     private String mTag;
 
     public JobPresenter(Context context){
-        httpUtils = HttpUtils.getInstance();
+        httpUtils = HttpManager.getInstance();
         dataUtils = DataUtils.getInstance(context.getApplicationContext());
     }
 
@@ -35,9 +36,9 @@ public class JobPresenter extends BasePresenter<JobContract.View> implements Job
     public void getJobList(String tag, int page) {
         mTag = tag;
         if (TextUtils.equals(tag, ConstValue.TAG_XIAOZHAO)){
-            httpUtils.getXiaoZhaoList(page,this);
+            httpUtils.getXiaoZhaoList(this,page,this);
         }else {
-            httpUtils.getShixiList(page,this);
+            httpUtils.getShixiList(this,page,this);
         }
 
     }
@@ -45,7 +46,7 @@ public class JobPresenter extends BasePresenter<JobContract.View> implements Job
     @Override
     public void getJobContent(int id) {
         mTag = null;
-        httpUtils.getJobContent(id, new HttpUtilsListener.JobContentCallback() {
+        httpUtils.getJobContent(this,id, new HttpManagerListener.JobContentCallback() {
             @Override
             public void onSuccess(JobContent content) {
                 mViewListener.onLoadedContent(content);
@@ -91,5 +92,6 @@ public class JobPresenter extends BasePresenter<JobContract.View> implements Job
         super.detachView();
         httpUtils = null;
         dataUtils = null;
+        OkHttpUtils.getInstance().cancelTag(this);
     }
 }
