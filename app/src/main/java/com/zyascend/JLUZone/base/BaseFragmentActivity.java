@@ -21,10 +21,12 @@ import cn.jpush.android.api.JPushInterface;
 public abstract class BaseFragmentActivity extends AppCompatActivity {
 
     protected Toolbar mToolbar;
+    protected Bundle saveState;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        saveState = savedInstanceState;
         setContentView(getLayoutId());
         ButterKnife.bind(this);
         initToolBar();

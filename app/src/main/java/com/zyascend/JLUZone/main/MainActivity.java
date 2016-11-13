@@ -34,6 +34,9 @@ public class MainActivity extends BaseFragmentActivity implements OnTabReselectL
     private static final String TAG = "TAG";
     @Bind(R.id.bottomBar)
     BottomBar bottomBar;
+    private MainFragment mainFragment;
+    private UserFragment userFragment;
+    private ExploreFragment exploreFragment;
 
     @Override
     protected void doOnCreate() {
@@ -45,6 +48,22 @@ public class MainActivity extends BaseFragmentActivity implements OnTabReselectL
         setToolbarTitle("知吉");
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
+
+        if (saveState == null){
+            //初次加载时
+            mainFragment = MainFragment.newInstance();
+            userFragment = new UserFragment();
+            exploreFragment = new ExploreFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.contentFrame,mainFragment)
+                    .add(R.id.contentFrame,userFragment)
+                    .add(R.id.contentFrame,exploreFragment)
+//                    .hide(userFragment)
+//                    .hide(exploreFragment)
+                    .commit();
+
+        }
+
 
         bottomBar.setOnTabSelectListener(this);
         bottomBar.setOnTabReselectListener(this);
@@ -75,15 +94,30 @@ public class MainActivity extends BaseFragmentActivity implements OnTabReselectL
         switch (tabId){
             case R.id.tab_main:
                 setToolbarTitle("知吉");
-                ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),new MainFragment());
+                getSupportFragmentManager().beginTransaction()
+                        .show(mainFragment)
+                        .hide(userFragment)
+                        .hide(exploreFragment)
+                        .commit();
                 break;
             case R.id.tab_explore:
                 setToolbarTitle("发现");
-                ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),new ExploreFragment());
+//                ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),new ExploreFragment());
+
+                getSupportFragmentManager().beginTransaction()
+                        .show(exploreFragment)
+                        .hide(userFragment)
+                        .hide(mainFragment)
+                        .commit();
                 break;
             case R.id.tab_user:
                 setToolbarTitle("设置");
-                ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),new UserFragment());
+//                ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),new UserFragment());
+                getSupportFragmentManager().beginTransaction()
+                        .show(userFragment)
+                        .hide(mainFragment)
+                        .hide(exploreFragment)
+                        .commit();
                 break;
         }
     }

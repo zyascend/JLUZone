@@ -93,6 +93,9 @@ public class MainFragment extends BaseFragment<MainContract.View, MainPresenter>
     private boolean isWeatherRefresh = false;
     private boolean isNextSchedule = false;
 
+    public static MainFragment newInstance(){
+        return new MainFragment();
+    }
 
     @Override
     protected int getLayoutId() {
