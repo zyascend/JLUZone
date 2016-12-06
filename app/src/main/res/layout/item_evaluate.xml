@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="#F2F4F7"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="4dp"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+        android:textSize="17sp"
+        android:textColor="@android:color/black"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/className"
+        tools:text="微机原理于接口技术啦啦啦啦"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+    <TextView
+        android:id="@+id/teacherName"
+        android:layout_marginTop="15dp"
+        tools:text="啦啦啦"
+        android:textSize="16sp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/className"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_evaluate"
+        android:text="一键评价"
+        android:textSize="12sp"
+        android:layout_alignBottom="@+id/teacherName"
+        android:layout_alignParentEnd="true"
+        android:background="@color/colorPrimary"
+        android:layout_width="60dp"
+        android:layout_height="30dp" />
+</RelativeLayout>
