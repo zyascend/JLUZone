@@ -3,6 +3,7 @@ package com.zyascend.JLUZone.model.net;
 import com.zyascend.JLUZone.base.BaseCallBack;
 import com.zyascend.JLUZone.entity.AvgScore;
 import com.zyascend.JLUZone.entity.Course;
+import com.zyascend.JLUZone.entity.EvaluateItem;
 import com.zyascend.JLUZone.entity.Job;
 import com.zyascend.JLUZone.entity.JobContent;
 import com.zyascend.JLUZone.entity.Score;
@@ -40,6 +41,9 @@ public interface HttpManagerListener {
     void getShixiList(JobPresenter presenter, int page, JobListCallback callback);
     void getJobContent(JobPresenter jobPresenter, int id, JobContentCallback callback);
     void getWeather(MainPresenter mainPresenter, WeatherCallback callback);
+
+    void loadEvaluateList(BaseCallBack<List<EvaluateItem>> callBack);
+    void evaluate(String itemId, int type, BaseCallBack callBack);
 
     interface ScoreDetailCallback extends BaseCallBack<ScoreDetail>{}
     interface AvgScoreCallback extends BaseCallBack<AvgScore>{}

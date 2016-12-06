@@ -41,8 +41,8 @@ import java.util.List;
  */
 public class DataUtils implements DataListener {
 
-    private static final String TAG = "TAG_DataUtils";
     private static SharedPreferences sf;
+    private static final String TAG = "TAG_DataUtils";
     private static DataUtils dataUtils;
     private static  DaoSession daoSession;
     private DataUtils(Context context){

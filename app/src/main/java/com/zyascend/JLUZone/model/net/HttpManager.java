@@ -7,10 +7,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 
+import com.baidu.platform.comapi.map.E;
+import com.zyascend.JLUZone.base.BaseCallBack;
 import com.zyascend.JLUZone.entity.ConstValue;
 import com.zyascend.JLUZone.entity.Course;
 
 import com.zyascend.JLUZone.entity.CourseResult;
+import com.zyascend.JLUZone.entity.EvaluateItem;
+import com.zyascend.JLUZone.entity.EvaluateParams;
+import com.zyascend.JLUZone.entity.EvaluateResult;
 import com.zyascend.JLUZone.entity.Job;
 import com.zyascend.JLUZone.entity.JobContent;
 import com.zyascend.JLUZone.entity.JobListResult;
@@ -39,6 +44,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -249,6 +255,7 @@ public class HttpManager implements HttpManagerListener {
     public void getAvgScore(ScorePresenter scorePresenter,AvgScoreCallback callback) {
 //        String requestString = "{\"type\":\"query\",\"res\":\"stat-avg-gpoint\",\"params\":{\"studId\":"+mStudId+"}}";
 //        requestScore(scorePresenter,requestString,callback);
+
     }
 
     @Override
@@ -379,6 +386,105 @@ public class HttpManager implements HttpManagerListener {
                 });
             }
         });
+    }
+
+    @Override
+    public void loadEvaluateList(final BaseCallBack<List<EvaluateItem>> callBack) {
+        String json = "{\"tag\":\"student@evalItem\",\"branch\":\"self\",\"params\":{\"blank\":\"Y\"}}";
+        OkHttpUtils.post()
+                .url(ConstValue.SEMES_SCORE_URL)
+                .json(json)
+                .call(new ResponseCallBack() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d(TAG, "loadEvaluateList: ----->"+response);
+                        List<EvaluateItem> items = null;
+                        try {
+                            EvaluateResult result = JSON.parseObject(response,EvaluateResult.class);
+                            items = mapEvaluate(result);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            IOException ioException = new IOException("解析失败");
+                            onFailure(ioException);
+                            callBack.onFailure(e);
+                        }
+                        callBack.onSuccess(items);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                            callBack.onFailure(e);
+                    }
+                });
+    }
+
+    private List<EvaluateItem> mapEvaluate(EvaluateResult result) {
+        if (result == null)return null;
+        List<EvaluateItem> items = new ArrayList<>();
+        for (EvaluateResult.ValueBean bean : result.getValue()) {
+            EvaluateItem item = new EvaluateItem(bean.getTargetClar().getNotes().replace("讲授","").replace("课程","")
+                    ,bean.getTarget().getName()
+                    ,bean.getEvalItemId()
+                    ,bean.getEvalActTime().getEvalTime().getDateStart()
+                    ,bean.getEvalActTime().getEvalTime().getDateStop()
+                    ,false);
+            items.add(item);
+        }
+        Log.d(TAG, "mapEvaluate:------> "+items.size());
+        return items;
+    }
+
+    @Override
+    public void evaluate(String itemId, int type, final BaseCallBack callBack) {
+        String json = getRequestString(itemId,type);
+        OkHttpUtils.post()
+                .url(ConstValue.URL_EVALUATE)
+                .json(json)
+                .call(new ResponseCallBack() {
+                    @Override
+                    public void onSuccess(String response) {
+                        callBack.onSuccess(null);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callBack.onFailure(e);
+                    }
+                });
+    }
+
+    private String getRequestString(String itemId, int type) {
+
+        String s = null;
+        String t = "A";
+        switch (type){
+            case 0:
+                t = "A";
+                break;
+            case 1:
+                t = "B";
+                break;
+            case 2:
+                t = "C";
+                break;
+            case 3:
+                t = "D";
+                break;
+        }
+        Log.d(TAG, "getRequestString: t = "+t);
+        try {
+            s = JSON.toJSONString(new EvaluateParams(itemId,new EvaluateParams.Answers(t)));
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d(TAG, "getRequestString: error = "+e.toString());
+        }finally {
+            //{"evalItemId":"3436805","answers":{"prob11":"A","prob12":"A","prob13":"D","prob14":"A"
+            // ,"prob15":"A","prob21":"A","prob22":"A","prob23":"A","prob31":"A","prob32":"A","prob41":"A","prob42":"A","prob43":"A","prob51":"A","prob52":"A","sat6":"A","mulsel71":"L","advice8":"无"}}
+            s = "{\"evalItemId\":\""+itemId+"\",\"answers\":{\"prob11\":\"A\",\"prob12\":\"A\",\"prob13\"" +
+                    ":\"D\",\"prob14\":\"A\",\"prob15\":\"A\",\"prob21\":\"A\",\"prob22\":\"A\",\"prob23\":\"A\",\"prob31\":\"A\",\"prob32\":\"A\",\"prob41\":\"A\",\"prob42\":\"A\",\"prob43\":\"A\",\"prob51\":\"A\",\"prob52\":\"A\",\"sat6\":\"A\",\"mulsel71\":\"L\",\"advice8\":\"无\"}}";
+        }
+        Log.d(TAG, "getRequestString: "+ s);
+        return s;
     }
 
 

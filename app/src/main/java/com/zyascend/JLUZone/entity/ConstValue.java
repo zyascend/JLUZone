@@ -44,4 +44,41 @@ public class ConstValue {
     public static final String URL_MAIN_IMAGE = "http://www.jlu.edu.cn/";
     public static final String URL_HOST_JWC = "http://oldjwc.jlu.edu.cn";
     public static final String URL_HOST_XIAO = "http://oa.jlu.edu.cn/";
+
+    public static final double NANLING_LAT = 43.860974;
+    public static final double NANLING_LOT = 125.341302;
+
+    public static final double QIAN_NAN_LAT = 43.829059;
+    public static final double QIAN_NAN_LOT = 125.287352;
+
+    //125.326482,43.886239
+    public static final double QIAN_BEI_LAT = 43.886239;
+    public static final double QIAN_BEI_LOT = 125.326482;
+    //125.314966,43.876377
+    public static final double XINMIN_LAT = 43.876377;
+    public static final double XINMIN_LOT = 125.314966;
+    //125.297073,43.856352
+    public static final double NANHU_LAT = 43.856352;
+    public static final double NANHU_LOT = 125.297073;
+    //125.314187,43.889507
+    public static final double CHAOYANG_LAT = 43.889507;
+    public static final double CHAOYANG_LOT = 125.314187;
+    //125.26976,43.91215
+    public static final double HEPIN_LAT = 43.91215;
+    public static final double HEPIN_LOT = 125.26976;
+
+    //获取待评列表
+    //http://uims.jlu.edu.cn/ntms/service/res.do
+    //{"tag":"student@evalItem","branch":"self","params":{"blank":"Y"}}
+
+    //全A评价
+    //http://uims.jlu.edu.cn/ntms/eduEvaluate/eval-with-answer.do
+    //{"evalItemId":"3436805","answers":{"prob11":"A","prob12":"A","prob13":"D","prob14":"A","prob15":"A","prob21":"A","prob22":"A","prob23":"A","prob31":"A","prob32":"A","prob41":"A","prob42":"A","prob43":"A","prob51":"A","prob52":"A","sat6":"A","mulsel71":"L","advice8":"无"}}
+    public static final String URL_EVALUATE = "http://uims.jlu.edu.cn/ntms/eduEvaluate/eval-with-answer.do";
+
+
+
+
+
+
 }

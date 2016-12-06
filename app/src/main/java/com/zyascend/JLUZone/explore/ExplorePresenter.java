@@ -1,11 +1,14 @@
 package com.zyascend.JLUZone.explore;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.zyascend.JLUZone.base.BasePresenter;
+import com.zyascend.JLUZone.evaluate.EvaluateActivity;
 import com.zyascend.JLUZone.job.JobActivity;
+import com.zyascend.JLUZone.map.MapActivity;
 import com.zyascend.JLUZone.news.NewsActivity;
 import com.zyascend.JLUZone.schedule.ScheduleActivity;
 import com.zyascend.JLUZone.score.ScoreActivity;
@@ -20,6 +23,7 @@ public class ExplorePresenter extends BasePresenter<ExploreContract.View> implem
             ExploreContract.Presenter{
 
 
+    public static final String INTENT_MAP = "intent_map";
     private Context mContext;
 
     public ExplorePresenter(Context context) {
@@ -58,6 +62,12 @@ public class ExplorePresenter extends BasePresenter<ExploreContract.View> implem
 
     @Override
     public void enterRate() {
-        Toast.makeText(mContext, "现在不是评教时间哦", Toast.LENGTH_SHORT).show();
+        ActivityUtils.enterActivity(mContext, EvaluateActivity.class);
+    }
+
+    public void enterMap(String map) {
+        Intent intent = new Intent(mContext,MapActivity.class);
+        intent.putExtra(INTENT_MAP,map);
+        mContext.startActivity(intent);
     }
 }

@@ -64,7 +64,6 @@ public class MainActivity extends BaseFragmentActivity implements OnTabReselectL
 
         }
 
-
         bottomBar.setOnTabSelectListener(this);
         bottomBar.setOnTabReselectListener(this);
     }

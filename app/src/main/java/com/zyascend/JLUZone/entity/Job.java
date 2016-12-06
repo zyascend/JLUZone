@@ -12,6 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class Job implements Parcelable{
+
     @Id
     private long id;
     private String title;

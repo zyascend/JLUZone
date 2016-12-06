@@ -23,6 +23,7 @@ import java.util.List;
 public class JobPresenter extends BasePresenter<JobContract.View> implements JobContract.Presenter
         , HttpManagerListener.JobListCallback
         {
+
     private HttpManager httpUtils;
     private DataUtils dataUtils;
     private String mTag;

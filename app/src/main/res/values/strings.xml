@@ -22,4 +22,5 @@
     <string name="text_about">联系作者</string>
     <string name="adress_weibo">微博：weibo.com/zyascend</string>
     <string name="ad_email">邮箱：www.1334553391@qq.com</string>
+    <string name="evaluate_alarm">某些情况下，如网络质量差，服务器故障，会导致一键评教功能失效。所以在本应用上完成评教之后，建议登陆教务网站进行核实。</string>
 </resources>

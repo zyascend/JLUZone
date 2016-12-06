@@ -142,6 +142,7 @@ public class JsoupUtils implements JsoupListener {
         }
 
         private List<News> loadJwcNews(String param) {
+
             Log.d(TAG, "loadJwcNews: hostUrl = "+param);
             List<News> list = new ArrayList<>();
             String title = "";
@@ -151,6 +152,7 @@ public class JsoupUtils implements JsoupListener {
             long id = 0;
 
             try {
+
                 Document document = Jsoup.connect(param).get();
                 Elements content = document.getElementsByAttributeValue("id","content");
                 Elements ul= content.first().getElementsByTag("ul");

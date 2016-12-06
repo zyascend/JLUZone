@@ -1,12 +1,15 @@
 package com.zyascend.JLUZone.explore;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zyascend.JLUZone.R;
@@ -37,8 +40,10 @@ public class ExploreFragment extends BaseFragment<ExploreContract.View, ExploreP
     LinearLayout llLesson;
     @Bind(R.id.ll_rate)
     LinearLayout llRate;
-    @Bind(R.id.ll_more)
-    LinearLayout llMore;
+    @Bind(R.id.tv_more)
+    TextView llMore;
+    @Bind(R.id.tv_map)
+    TextView tv_map;
 
     @Override
     protected int getLayoutId() {
@@ -56,7 +61,7 @@ public class ExploreFragment extends BaseFragment<ExploreContract.View, ExploreP
     }
 
 
-    @OnClick({R.id.ll_schedule, R.id.ll_score, R.id.ll_news, R.id.ll_job, R.id.ll_lesson, R.id.ll_rate, R.id.ll_more})
+    @OnClick({R.id.ll_schedule, R.id.ll_score, R.id.ll_news, R.id.ll_job, R.id.ll_lesson, R.id.ll_rate, R.id.tv_more,R.id.tv_map})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_schedule:
@@ -77,9 +82,33 @@ public class ExploreFragment extends BaseFragment<ExploreContract.View, ExploreP
             case R.id.ll_rate:
                 mPresenter.enterRate();
                 break;
-            case R.id.ll_more:
+            case R.id.tv_more:
                 Toast.makeText(getActivity(), "更多功能，敬请期待", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.tv_map:
+//                mPresenter.enterMap();
+                enterMapActivity();
+                break;
         }
+    }
+
+    private void enterMapActivity() {
+        final String[] maps = getResources().getStringArray(R.array.map_list);
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle("选择地图: ")
+                .setIcon(R.drawable.ic_where)
+                .setItems(R.array.map_list, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.enterMap(maps[which]);
+                    }
+                })
+                .setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.show();
     }
 }

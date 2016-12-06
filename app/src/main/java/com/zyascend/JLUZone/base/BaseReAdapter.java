@@ -24,7 +24,6 @@ public abstract class BaseReAdapter extends RecyclerView.Adapter{
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         return null;
     }
 

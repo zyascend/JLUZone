@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 
+import com.baidu.mapapi.SDKInitializer;
 import com.zyascend.JLUZone.http.OkHttpUtils;
 
 import cn.jpush.android.api.JPushInterface;
@@ -27,6 +28,7 @@ public class BaseApplication extends Application {
         OkHttpUtils.init(this);
         OkHttpUtils.getInstance()
                 .build();
+        SDKInitializer.initialize(this);
     }
 
 
