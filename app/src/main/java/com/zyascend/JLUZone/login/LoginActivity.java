@@ -52,6 +52,7 @@ public class LoginActivity extends BaseActivity<LoginContract.View, LoginPresent
 
     @Override
     protected void doOnCreate() {
+
         String type = getIntent().getStringExtra(UserPresenter.INTENT_LOGIN_TYPE);
         if (!TextUtils.equals(type, UserPresenter.TYPE_OUT)){
             mPresenter.getStuInfo();

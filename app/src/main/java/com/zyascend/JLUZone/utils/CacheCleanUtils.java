@@ -109,7 +109,6 @@ public class CacheCleanUtils {
         clearImageMemoryCache(context);
         deleteFolderFile(ImageExternalCatchDir, true);
     }
-
     /**
      * 获取Glide造成的缓存大小
      *

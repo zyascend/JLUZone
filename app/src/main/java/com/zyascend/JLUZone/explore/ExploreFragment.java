@@ -93,22 +93,25 @@ public class ExploreFragment extends BaseFragment<ExploreContract.View, ExploreP
     }
 
     private void enterMapActivity() {
+
         final String[] maps = getResources().getStringArray(R.array.map_list);
-        AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                .setTitle("选择地图: ")
-                .setIcon(R.drawable.ic_where)
-                .setItems(R.array.map_list, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mPresenter.enterMap(maps[which]);
-                    }
-                })
-                .setPositiveButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).create();
-        dialog.show();
+        mPresenter.enterMap(maps[0]);
+
+//        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+//                .setTitle("选择地图: ")
+//                .setIcon(R.drawable.ic_where)
+//                .setItems(R.array.map_list, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        mPresenter.enterMap(maps[which]);
+//                    }
+//                })
+//                .setPositiveButton("取消", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                }).create();
+//        dialog.show();
     }
 }

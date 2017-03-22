@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.zyascend.JLUZone.R;
@@ -40,7 +41,8 @@ public class EvaluateActivity extends BaseActivity<EvaluateContract.View, Evalua
 
     @Override
     protected void doOnCreate() {
-
+        Log.v("system", "doOnCreate: ");
+        System.out.print('I'+'T');
         android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(this)
                 .setTitle("注意事项")
                 .setMessage(getString(R.string.evaluate_alarm))

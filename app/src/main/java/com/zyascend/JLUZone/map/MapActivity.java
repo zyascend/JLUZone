@@ -6,14 +6,17 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
@@ -60,17 +63,12 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
     private static final String TAG = "TAG_MapActivity";
     @Bind(R.id.mapView)
     MapView mMapView;
-    @Bind(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @Bind(R.id.bottom_sheet)
-    NestedScrollView bottomSheet;
     @Bind(R.id.fab_goto)
     FloatingActionButton fabGoto;
     @Bind(R.id.fab_locate)
     FloatingActionButton fabLocate;
     private double lat = ConstValue.NANLING_LAT;
     private double lon = ConstValue.NANLING_LOT;
-    private BottomSheetBehavior<NestedScrollView> behavior;
     private GotoAdapter adapter;
     private BaiduMap mBaiduMap;
     private LocationClient mLocationClient;
@@ -79,9 +77,13 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
     private PoiSearch mPoiSearch;
     private boolean canSearchNext = true;
 
+    RecyclerView recyclerView;
+    RecyclerView destinationView;
+    private DestinationAdapter destinationAdapter;
+
     @Override
     protected void doOnCreate() {
-
+        mToolbar.setTitle("我的位置");
     }
 
     @Override
@@ -95,17 +97,8 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
 
     private void init(){
         initMaps();
-        initBottomSheet();
-        initData();
     }
 
-    private void initBottomSheet() {
-        behavior = BottomSheetBehavior.from(bottomSheet);
-        adapter = new GotoAdapter(this);
-        adapter.setOnItemClickListener(this);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,3));
-        recyclerView.setAdapter(adapter);
-    }
 
     @TargetApi(Build.VERSION_CODES.M)
     private void checkMyPermission() {
@@ -155,40 +148,38 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
         }
     }
 
-    private void initData() {
-        String type = getIntent().getStringExtra(ExplorePresenter.INTENT_MAP);
-        String[] maps = getResources().getStringArray(R.array.map_list);
-        if (TextUtils.equals(type, maps[0])) {
-            mPresenter.locateMySelf(lat, lon);
-            return;
-        } else if (TextUtils.equals(type, maps[2])) {
-            //125.287352,43.829059
-            lat = ConstValue.QIAN_NAN_LAT;
-            lon = ConstValue.QIAN_NAN_LOT;
-        } else if (TextUtils.equals(type, maps[1])) {
-            //125.341302,43.860974
-            lat = ConstValue.NANLING_LAT;
-            lon = ConstValue.NANLING_LOT;
-        } else if (TextUtils.equals(type, maps[3])) {
-            //125.287352,43.829059
-            lat = ConstValue.QIAN_BEI_LAT;
-            lon = ConstValue.QIAN_BEI_LOT;
-        } else if (TextUtils.equals(type, maps[4])) {
-            //125.287352,43.829059
-            lat = ConstValue.XINMIN_LAT;
-            lon = ConstValue.XINMIN_LOT;
-        } else if (TextUtils.equals(type, maps[5])) {
-            //125.287352,43.829059
-            lat = ConstValue.NANHU_LAT;
-            lon = ConstValue.NANHU_LOT;
-        } else if (TextUtils.equals(type, maps[6])) {
-            //125.287352,43.829059
-            lat = ConstValue.HEPIN_LAT;
-            lon = ConstValue.HEPIN_LOT;
-        } else if (TextUtils.equals(type, maps[7])) {
-            //125.287352,43.829059
-            lat = ConstValue.CHAOYANG_LAT;
-            lon = ConstValue.CHAOYANG_LOT;
+    private void changeMap(int position) {
+
+        switch (position){
+            case 0:
+                lat = ConstValue.NANLING_LAT;
+                lon = ConstValue.NANLING_LOT;
+                break;
+            case 1:
+                lat = ConstValue.QIAN_NAN_LAT;
+                lon = ConstValue.QIAN_NAN_LOT;
+                break;
+            case 2:
+                lat = ConstValue.NANHU_LAT;
+                lon = ConstValue.NANHU_LOT;
+                break;
+            case 3:
+                lat = ConstValue.HEPIN_LAT;
+                lon = ConstValue.HEPIN_LOT;
+                break;
+            case 4:
+                lat = ConstValue.XINMIN_LAT;
+                lon = ConstValue.XINMIN_LOT;
+                break;
+            case 5:
+                lat = ConstValue.CHAOYANG_LAT;
+                lon = ConstValue.CHAOYANG_LOT;
+                break;
+            default:
+                if (mLocationClient == null) break;
+                mLocationClient.start();
+                break;
+
         }
         moveCenter();
     }
@@ -271,17 +262,25 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab_goto:
-                if(behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }else {
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                }
+                showGotoDialog();
                 break;
             case R.id.fab_locate:
                 if (mLocationClient == null) break;
                 mLocationClient.start();
                 break;
         }
+    }
+
+    private void showGotoDialog() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View view = getLayoutInflater().inflate(R.layout.layout_goto, null);
+        adapter = new GotoAdapter(this);
+        adapter.setOnItemClickListener(this);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(this,3));
+        recyclerView.setAdapter(adapter);
+        dialog.setContentView(view);
+        dialog.show();
     }
 
     @Override
@@ -342,12 +341,9 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
 
     @Override
     public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
-
     }
-
     @Override
     public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
-
     }
 
     @Override
@@ -362,6 +358,48 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
 
     @Override
     protected void loadFragment() {
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.map_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_change_map:
+                showDestinationDialog();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showDestinationDialog() {
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View view = getLayoutInflater().inflate(R.layout.layout_destination, null);
+        destinationAdapter = new DestinationAdapter(this);
+        destinationView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        destinationView.setLayoutManager(new LinearLayoutManager(this));
+        destinationView.setAdapter(destinationAdapter);
+        destinationAdapter.setOnItemClickListener(new BaseReAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                changeMap(position);
+                mToolbar.setTitle(MapActivity.this.getResources().getStringArray(R.array.map_list)[position]);
+                dialog.dismiss();
+            }
+        });
+
+        TextView title = (TextView) view.findViewById(R.id.tv_title);
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setContentView(view);
+        dialog.show();
     }
 }

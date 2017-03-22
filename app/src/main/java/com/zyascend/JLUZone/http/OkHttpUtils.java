@@ -98,8 +98,8 @@ public class OkHttpUtils {
 
 
     private class CookiesManager implements CookieJar {
-        private final PersistentCookieStore cookieStore = new PersistentCookieStore(context);
 
+        private final PersistentCookieStore cookieStore = new PersistentCookieStore(context);
         @Override
         public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
             if (cookies != null && cookies.size() > 0) {
@@ -108,7 +108,6 @@ public class OkHttpUtils {
                 }
             }
         }
-
         @Override
         public List<Cookie> loadForRequest(HttpUrl url) {
             List<Cookie> cookies = cookieStore.get(url);

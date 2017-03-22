@@ -76,6 +76,8 @@ public class ConstValue {
     //{"evalItemId":"3436805","answers":{"prob11":"A","prob12":"A","prob13":"D","prob14":"A","prob15":"A","prob21":"A","prob22":"A","prob23":"A","prob31":"A","prob32":"A","prob41":"A","prob42":"A","prob43":"A","prob51":"A","prob52":"A","sat6":"A","mulsel71":"L","advice8":"无"}}
     public static final String URL_EVALUATE = "http://uims.jlu.edu.cn/ntms/eduEvaluate/eval-with-answer.do";
 
+    public static final String URL_CHANNEL = "http://202.98.18.57:18080/webservice/m/api/getWebCastList";
+
 
 
 
