@@ -26,16 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="0dp"
-        app:layout_behavior="@string/bottom_sheet_behavior">
-        <include layout="@layout/layout_goto"/>
-    </android.support.v4.widget.NestedScrollView>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_goto"
         app:elevation="4dp"

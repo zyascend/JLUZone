@@ -19,6 +19,8 @@ import com.zyascend.JLUZone.entity.EvaluateResult;
 import com.zyascend.JLUZone.entity.Job;
 import com.zyascend.JLUZone.entity.JobContent;
 import com.zyascend.JLUZone.entity.JobListResult;
+import com.zyascend.JLUZone.entity.LiveChannel;
+import com.zyascend.JLUZone.entity.LiveResult;
 import com.zyascend.JLUZone.entity.MyResponseBody;
 import com.zyascend.JLUZone.entity.Score;
 import com.zyascend.JLUZone.entity.ScoreDetail;
@@ -352,40 +354,104 @@ public class HttpManager implements HttpManagerListener {
 
     @Override
     public void getWeather(MainPresenter mainPresenter, final WeatherCallback callback) {
-        String httpUrl = "http://wthrcdn.etouch.cn/weather_mini?citykey=101060101";
-        Request request = new Request.Builder()
-                .get()
+        OkHttpUtils.get()
+                .url(ConstValue.URL_WEATHER)
                 .tag(mainPresenter)
-                .url(httpUrl)
-                .build();
-        mHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onFailure(e);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Weather weather = new Weather();
-                try {
-                    String res = response.body().string();
-                    Log.d(TAG, "responseWeather: "+res);
-                    weather = JSON.parseObject(res,Weather.class);
-                }catch (Exception e){
-                    e.printStackTrace();
-                    IOException ioException = new IOException("解析失败");
-                    onFailure(null,ioException);
-                    Log.d(TAG, "responseDetailScore: error = "+e.toString());
-                }
-                final Weather finalWeather = weather;
-                mHandler.post(new Runnable() {
+                .call(new ResponseCallBack() {
                     @Override
-                    public void run() {
-                        callback.onSuccess(finalWeather);
+                    public void onSuccess(String response) {
+                        Weather weather = new Weather();
+                        try {
+                            Log.d(TAG, "responseWeather: "+response);
+                            weather = JSON.parseObject(response,Weather.class);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            IOException ioException = new IOException("解析失败");
+                            onFailure(ioException);
+                            Log.d(TAG, "responseDetailScore: error = "+e.toString());
+                        }
+                        callback.onSuccess(weather);
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure(e);
                     }
                 });
-            }
-        });
+
+
+//
+//        Request request = new Request.Builder()
+//                .get()
+//                .tag(mainPresenter)
+//                .url(httpUrl)
+//                .build();
+//        mHttpClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                callback.onFailure(e);
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                Weather weather = new Weather();
+//                try {
+//                    String res = response.body().string();
+//                    Log.d(TAG, "responseWeather: "+res);
+//                    weather = JSON.parseObject(res,Weather.class);
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                    IOException ioException = new IOException("解析失败");
+//                    onFailure(null,ioException);
+//                    Log.d(TAG, "responseDetailScore: error = "+e.toString());
+//                }
+//                final Weather finalWeather = weather;
+//                mHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        callback.onSuccess(finalWeather);
+//                    }
+//                });
+//            }
+//        });
+    }
+
+    @Override
+    public void getChannel(final ChannelCallback callback) {
+        OkHttpUtils.get()
+                .url(ConstValue.URL_CHANNEL)
+                .tag(callback)
+                .call(new ResponseCallBack() {
+                    @Override
+                    public void onSuccess(String response) {
+                        List<LiveChannel> liveChannels = new ArrayList<LiveChannel>();
+                        try {
+                            Log.d(TAG, "responseWeather: "+response);
+                            LiveResult result = JSON.parseObject(response,LiveResult.class);
+                            liveChannels = mapChannel(result);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            IOException ioException = new IOException("解析失败");
+                            onFailure(ioException);
+                            Log.d(TAG, "responseDetailScore: error = "+e.toString());
+                        }
+                        callback.onSuccess(liveChannels);
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
+    }
+
+    private List<LiveChannel> mapChannel(LiveResult result) {
+        if (result != null && result.getResultValue() != null){
+            return result.getResultValue();
+        }
+        return null;
     }
 
     @Override

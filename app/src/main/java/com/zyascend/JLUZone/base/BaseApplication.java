@@ -17,7 +17,7 @@ import cn.jpush.android.api.JPushInterface;
 public class BaseApplication extends Application {
 
     private boolean isNight;
-    public Context context;
+    public static Context context;
 //    public RefWatcher refWatcher;
     @Override
     public void onCreate() {

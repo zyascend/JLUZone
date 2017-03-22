@@ -6,6 +6,7 @@ import com.zyascend.JLUZone.entity.Course;
 import com.zyascend.JLUZone.entity.EvaluateItem;
 import com.zyascend.JLUZone.entity.Job;
 import com.zyascend.JLUZone.entity.JobContent;
+import com.zyascend.JLUZone.entity.LiveChannel;
 import com.zyascend.JLUZone.entity.Score;
 import com.zyascend.JLUZone.entity.ScoreDetail;
 import com.zyascend.JLUZone.entity.StuInfo;
@@ -16,6 +17,8 @@ import com.zyascend.JLUZone.login.LoginPresenter;
 import com.zyascend.JLUZone.main.MainPresenter;
 import com.zyascend.JLUZone.schedule.SchedulePresenter;
 import com.zyascend.JLUZone.score.ScorePresenter;
+
+import org.jsoup.Connection;
 
 import java.util.List;
 
@@ -41,6 +44,7 @@ public interface HttpManagerListener {
     void getShixiList(JobPresenter presenter, int page, JobListCallback callback);
     void getJobContent(JobPresenter jobPresenter, int id, JobContentCallback callback);
     void getWeather(MainPresenter mainPresenter, WeatherCallback callback);
+    void getChannel(ChannelCallback channelCallback);
 
     void loadEvaluateList(BaseCallBack<List<EvaluateItem>> callBack);
     void evaluate(String itemId, int type, BaseCallBack callBack);
@@ -57,4 +61,5 @@ public interface HttpManagerListener {
     interface JobContentCallback extends BaseCallBack<JobContent> {}
 
     interface WeatherCallback extends BaseCallBack<Weather>{}
+    interface ChannelCallback extends BaseCallBack<List<LiveChannel>>{}
 }

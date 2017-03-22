@@ -78,9 +78,5 @@ public class ConstValue {
 
     public static final String URL_CHANNEL = "http://202.98.18.57:18080/webservice/m/api/getWebCastList";
 
-
-
-
-
-
+    public static final String URL_WEATHER = "http://wthrcdn.etouch.cn/weather_mini?citykey=101060101";
 }
