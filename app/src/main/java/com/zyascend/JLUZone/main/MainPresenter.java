@@ -88,6 +88,8 @@ public class MainPresenter extends BasePresenter<MainContract.View>
 
         List<Course> courses = mDataUtils.getCourseByDayAndTerm(realDay,termId);
         mViewListener.onLoadSchedule(courses);
+
+
     }
 
     private int getRealDay(int day, int currentDay) {

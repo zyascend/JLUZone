@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2017/3/22.
@@ -31,6 +32,7 @@ public class LiveAdapter extends EasyAdapter<LiveAdapter.LiveHolder> {
         list.addAll(channels);
         notifyDataSetChanged();
     }
+
 
 
     @Override
@@ -68,6 +70,7 @@ public class LiveAdapter extends EasyAdapter<LiveAdapter.LiveHolder> {
         TextView channel;
         public LiveHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this,itemView);
         }
     }
 }

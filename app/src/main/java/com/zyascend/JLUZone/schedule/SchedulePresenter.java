@@ -65,7 +65,6 @@ implements ScheduleConstract.Presenter{
                 getTermsFromData();
             }
         });
-
     }
 
     private void getTermsFromData() {
@@ -111,6 +110,11 @@ implements ScheduleConstract.Presenter{
                 mViewListener.shareFail();
             }
         }).shareSchedule(scrollView,mContext);
+    }
+
+    @Override
+    public void loadCurrentTerm() {
+        mViewListener.showLoadCurrentTerm(mDataUtils.getCurrentTerm());
     }
 
     private void loadScheduleFromNet(final int termId) {

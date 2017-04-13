@@ -1,68 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:background="@drawable/schedule_tab_back"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="wrap_content"
-    android:layout_height="20dp">
+    android:layout_height="wrap_content">
 
     <TextView
-        android:background="@color/pink"
-        android:gravity="center"
-        android:textSize="15sp"
-        android:textColor="@android:color/white"
-        android:text="周一"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3" />
+        style="@style/schedule_week_text"
+        android:text="周一"/>
 
     <TextView
-        android:background="@color/pink"
-        android:gravity="center"
-        android:textSize="15sp"
-        android:textColor="@android:color/white"
-        android:text="周二"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content" />
+        style="@style/schedule_week_text"
+        android:text="周二"/>
+    <TextView
+        style="@style/schedule_week_text"
+        android:text="周三"/>
 
     <TextView
-        android:background="@color/pink"
+        style="@style/schedule_week_text"
+        android:text="周四"/>
+    <TextView
+        style="@style/schedule_week_text"
+        android:text="周五"/>
 
-        android:gravity="center"
-        android:textSize="15sp"
-        android:textColor="@android:color/white"
-        android:text="周三"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content" />
     <TextView
-        android:background="@color/pink"
+        style="@style/schedule_week_text"
+        android:text="周六"/>
+    <TextView
+        style="@style/schedule_week_text"
+        android:text="周日"/>
 
-        android:gravity="center"
-        android:textSize="15sp"
-        android:textColor="@android:color/white"
-        android:text="周四"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:background="@color/pink"
-        android:gravity="center"
-        android:textSize="15sp"
-        android:textColor="@android:color/white"
-        android:text="周五"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:background="@color/pink"
-        android:gravity="center"
-        android:textSize="15sp"
-        android:textColor="@android:color/white"
-        android:text="周六"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:background="@color/pink"
-        android:gravity="center"
-        android:textSize="15sp"
-        android:textColor="@android:color/white"
-        android:text="周日"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content" />
 </LinearLayout>

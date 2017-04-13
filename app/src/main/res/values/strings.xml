@@ -23,4 +23,6 @@
     <string name="adress_weibo">微博：weibo.com/zyascend</string>
     <string name="ad_email">邮箱：www.1334553391@qq.com</string>
     <string name="evaluate_alarm">某些情况下，如网络质量差，服务器故障，会导致一键评教功能失效。所以在本应用上完成评教之后，建议登陆教务网站进行核实。</string>
+    <string name="week_info">显示“单双周”的课程单双周不同，详情请登录官网查看.</string>
+    <string name="loading">数据加载中...</string>
 </resources>

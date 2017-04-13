@@ -29,8 +29,6 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_goto"
         app:elevation="4dp"
-        app:layout_anchor="@+id/bottom_sheet"
-        app:layout_anchorGravity="start"
         android:src="@drawable/ic_goto"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="start|bottom"

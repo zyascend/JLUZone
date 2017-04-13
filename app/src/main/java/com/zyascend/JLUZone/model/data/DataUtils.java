@@ -73,6 +73,19 @@ public class DataUtils implements DataListener {
             e.printStackTrace();
             printError(e);
         }
+        saveCurrentTerm(stuInfo.currentTerm);
+    }
+
+    @Override
+    public int getCurrentTerm() {
+        return sf.getInt(ConstValue.CURRENT_TERM,0);
+    }
+
+    @Override
+    public void saveCurrentTerm(int currentTerm) {
+        SharedPreferences.Editor editor = sf.edit();
+        editor.putInt(ConstValue.CURRENT_TERM,currentTerm);
+        editor.apply();
     }
 
     private void printError(Exception e) {

@@ -1,8 +1,10 @@
 package com.zyascend.JLUZone.schedule;
 
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +14,11 @@ import android.widget.TextView;
 import com.zyascend.JLUZone.R;
 import com.zyascend.JLUZone.base.BaseReAdapter;
 import com.zyascend.JLUZone.entity.Course;
-import com.zyascend.JLUZone.entity.Score;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,6 +29,7 @@ import butterknife.ButterKnife;
 
 public class ScheduleAdapter extends BaseReAdapter {
     private static final String TAG = "TAG_SCADapter";
+    private final Context mContext;
     @Bind(R.id.name)
     TextView name;
     @Bind(R.id.place)
@@ -34,9 +38,13 @@ public class ScheduleAdapter extends BaseReAdapter {
     TextView teacher;
     private List<Course> mList = new ArrayList<>();
     private List<String> mNameList;
+    private HashMap<String,Integer> colorMap ;
+    private int colorIndex = 0;
 
-    public ScheduleAdapter() {
+    public ScheduleAdapter(Context context) {
+        mContext = context;
         mNameList = new ArrayList<>();
+        colorMap = new HashMap<String, Integer>();
     }
 
     @Override
@@ -68,41 +76,34 @@ public class ScheduleAdapter extends BaseReAdapter {
                 viewHolder.place.setText(p[1]);
             }
             String teacherAndWeek = course.getTeacher()+" "+course.getBeginWeek()+"~"+course.getEndWeek()+"周";
+
             viewHolder.teacher.setText(teacherAndWeek);
-            viewHolder.itemView.setBackgroundResource(getColorByName(course.getName()));
+            viewHolder.cardView.setCardBackgroundColor(ContextCompat.getColor(mContext,getColorByName(course.getName())));
         } else {
-            viewHolder.itemView.setBackgroundResource(android.R.color.white);
+            viewHolder.cardView.setAlpha(0);
         }
 
     }
 
-    private int getColorByName(String name) {
-        int color = R.color.colorAccent;
-        for (int i = 0; i < mNameList.size(); i++) {
-            if (TextUtils.equals(name, mNameList.get(i))) {
-                color = getColor(i);
-            }
+    private int getColorByName(String key) {
+        if (colorMap.containsKey(key)) {
+            return getColor(colorMap.get(key));
+        }else {
+            colorMap.put(key, colorIndex++);
+            return getColor(colorMap.get(key));
         }
-        if (color == R.color.colorAccent) {
-            color = getColor(mNameList.size());
-            mNameList.add(name);
-            Log.d(TAG, "getColorByName: first get");
-        }
-        return color;
     }
 
     private int getColor(int i) {
-
+        Log.d(TAG, "getColor: "+i);
         int[] color = {R.color.material_blue, R.color.material_deep_orange, R.color.material_green
                 , R.color.material_deep_purple, R.color.material_red};
         int flags = i >= 5 ? i % 5 : i;
-
+        Log.d(TAG, "getColor: flags:    " + flags);
         return color[flags];
     }
 
     private Course getCourseByPosition(int position) {
-
-
         if (mList != null && !mList.isEmpty()) {
             for (Course course : mList) {
                 String time = course.getTime();
@@ -117,7 +118,6 @@ public class ScheduleAdapter extends BaseReAdapter {
                 if (day == 7) {
                     day = 0;
                 }
-
                 // TODO: 2016/10/16 处理有晚自习的情况
                 Log.d(TAG, "getCourseByPosition: before = " + course.getName());
                 if ((position + 8) % 7 == day  && position / 7 == (start+1) / 2 - 1) {
@@ -138,7 +138,8 @@ public class ScheduleAdapter extends BaseReAdapter {
         Log.d(TAG, "setData: " + courses.size());
         this.mList = courses;
         int mWeek = mCurrentWeek;
-
+        colorIndex = 0 ;
+        colorMap.clear();
         notifyDataSetChanged();
     }
 
@@ -153,6 +154,8 @@ public class ScheduleAdapter extends BaseReAdapter {
         TextView teacher;
         @Bind(R.id.tv_alarm)
         TextView tvAlarm;
+        @Bind(R.id.cardView)
+        CardView cardView;
         public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

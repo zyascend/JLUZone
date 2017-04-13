@@ -8,7 +8,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 
 import com.baidu.platform.comapi.map.E;
+import com.bumptech.glide.util.LogTime;
 import com.zyascend.JLUZone.base.BaseCallBack;
+import com.zyascend.JLUZone.entity.AvgScore;
 import com.zyascend.JLUZone.entity.ConstValue;
 import com.zyascend.JLUZone.entity.Course;
 
@@ -254,9 +256,42 @@ public class HttpManager implements HttpManagerListener {
     }
 
     @Override
-    public void getAvgScore(ScorePresenter scorePresenter,AvgScoreCallback callback) {
-//        String requestString = "{\"type\":\"query\",\"res\":\"stat-avg-gpoint\",\"params\":{\"studId\":"+mStudId+"}}";
-//        requestScore(scorePresenter,requestString,callback);
+    public void getAvgScore(ScorePresenter scorePresenter, final AvgScoreCallback callback) {
+        //获取选修课统计
+        //http://uims.jlu.edu.cn/ntms/service/res.do
+        //{"type":"query","res":"stat-credit-stud","params":{"studId":238615}}
+
+
+        //获取平均成绩绩点统计
+        //http://uims.jlu.edu.cn/ntms/service/res.do
+        //
+
+        String requestString = "{\"type\":\"query\",\"res\":\"stat-avg-gpoint\",\"params\":{\"studId\":"+mStudId+"}}";
+        OkHttpUtils.post()
+                .url(ConstValue.SEMES_SCORE_URL)
+                .json(requestString)
+                .tag(scorePresenter)
+                .call(new ResponseCallBack() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d(TAG, "onSuccess: avgScore = "+response);
+                        AvgScore avgScore = null;
+                        try {
+                            JSONObject responses = JSON.parseObject(response);
+                            avgScore = JSON.parseObject(responses.toString(),AvgScore.class);
+                        } catch (Exception e) {
+                            IOException ioException = new IOException("未登录");
+                            onFailure(ioException);
+                            e.printStackTrace();
+                        }
+                        callback.onSuccess(avgScore);
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        callback.onFailure(e);
+                    }
+                });
 
     }
 
@@ -295,7 +330,7 @@ public class HttpManager implements HttpManagerListener {
     }
 
     private void requestJobList(JobPresenter presenter,String url, final JobListCallback callback) {
-        OkHttpUtils.post()
+        OkHttpUtils.get()
                 .tag(presenter)
                 .url(url)
                 .call(new ResponseCallBack() {
@@ -327,7 +362,7 @@ public class HttpManager implements HttpManagerListener {
     @Override
     public void getJobContent(JobPresenter jobPresenter, int id, final JobContentCallback callback) {
 
-        OkHttpUtils.post()
+        OkHttpUtils.get()
                 .url(ConstValue.URL_JOB_CONTENT + id)
                 .tag(jobPresenter)
                 .call(new ResponseCallBack() {
@@ -371,50 +406,12 @@ public class HttpManager implements HttpManagerListener {
                             Log.d(TAG, "responseDetailScore: error = "+e.toString());
                         }
                         callback.onSuccess(weather);
-
                     }
-
                     @Override
                     public void onFailure(Exception e) {
                         callback.onFailure(e);
                     }
                 });
-
-
-//
-//        Request request = new Request.Builder()
-//                .get()
-//                .tag(mainPresenter)
-//                .url(httpUrl)
-//                .build();
-//        mHttpClient.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                callback.onFailure(e);
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                Weather weather = new Weather();
-//                try {
-//                    String res = response.body().string();
-//                    Log.d(TAG, "responseWeather: "+res);
-//                    weather = JSON.parseObject(res,Weather.class);
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                    IOException ioException = new IOException("解析失败");
-//                    onFailure(null,ioException);
-//                    Log.d(TAG, "responseDetailScore: error = "+e.toString());
-//                }
-//                final Weather finalWeather = weather;
-//                mHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        callback.onSuccess(finalWeather);
-//                    }
-//                });
-//            }
-//        });
     }
 
     @Override
@@ -427,7 +424,7 @@ public class HttpManager implements HttpManagerListener {
                     public void onSuccess(String response) {
                         List<LiveChannel> liveChannels = new ArrayList<LiveChannel>();
                         try {
-                            Log.d(TAG, "responseWeather: "+response);
+                            Log.d(TAG, "responseChannel: "+response);
                             LiveResult result = JSON.parseObject(response,LiveResult.class);
                             liveChannels = mapChannel(result);
                         }catch (Exception e){
@@ -442,6 +439,7 @@ public class HttpManager implements HttpManagerListener {
 
                     @Override
                     public void onFailure(Exception e) {
+                        Log.d(TAG, "onFailure: channel:    "+e.toString());
                         callback.onFailure(e);
                     }
                 });
@@ -458,6 +456,7 @@ public class HttpManager implements HttpManagerListener {
     public void loadEvaluateList(final BaseCallBack<List<EvaluateItem>> callBack) {
         String json = "{\"tag\":\"student@evalItem\",\"branch\":\"self\",\"params\":{\"blank\":\"Y\"}}";
         OkHttpUtils.post()
+                .tag(callBack)
                 .url(ConstValue.SEMES_SCORE_URL)
                 .json(json)
                 .call(new ResponseCallBack() {
@@ -689,5 +688,7 @@ public class HttpManager implements HttpManagerListener {
         }
         return courses;
     }
+
+
 
 }

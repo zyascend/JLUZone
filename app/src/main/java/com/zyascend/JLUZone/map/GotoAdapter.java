@@ -2,11 +2,13 @@ package com.zyascend.JLUZone.map;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zyascend.JLUZone.R;
@@ -43,7 +45,7 @@ public class GotoAdapter extends BaseReAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final GoToHolder viewHolder = (GoToHolder) holder;
-        viewHolder.text.setCompoundDrawables(null,getDrawable(position),null,null);
+        viewHolder.imageView.setImageResource(drawables[position]);
         viewHolder.text.setText(texts[position]);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +72,8 @@ public class GotoAdapter extends BaseReAdapter {
     class GoToHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.text)
         TextView text;
+        @Bind(R.id.image)
+        ImageView imageView;
 
         public GoToHolder(View itemView) {
             super(itemView);

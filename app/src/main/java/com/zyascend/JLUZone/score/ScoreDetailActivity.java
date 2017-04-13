@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.zyascend.JLUZone.R;
 import com.zyascend.JLUZone.base.BaseActivity;
+import com.zyascend.JLUZone.entity.AvgScore;
 import com.zyascend.JLUZone.entity.Score;
 import com.zyascend.JLUZone.entity.ScoreDetail;
 import com.zyascend.JLUZone.share.ShareScoreActivity;
@@ -182,6 +183,11 @@ public class ScoreDetailActivity extends BaseActivity<ScoreContract.View, ScoreP
 
     @Override
     public void onSorted(List<Score> scores) {
+
+    }
+
+    @Override
+    public void loadAvgScore(AvgScore score) {
 
     }
 

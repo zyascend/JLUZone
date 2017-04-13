@@ -1,11 +1,15 @@
 package com.zyascend.JLUZone.score;
 
+import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
@@ -16,17 +20,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zyascend.JLUZone.R;
 import com.zyascend.JLUZone.base.BaseFragment;
 import com.zyascend.JLUZone.base.BaseReAdapter;
+import com.zyascend.JLUZone.entity.AvgScore;
 import com.zyascend.JLUZone.entity.ConstValue;
 import com.zyascend.JLUZone.entity.Score;
 import com.zyascend.JLUZone.entity.ScoreDetail;
+import com.zyascend.JLUZone.entity.ScoreStatics;
 import com.zyascend.JLUZone.utils.ActivityUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -67,6 +75,47 @@ public class ScoreFragment extends BaseFragment<ScoreContract.View, ScorePresent
     private Context mContext;
     private int currentDialogPosition;
     private int mCurrentPosition;
+
+    private Handler mHandler;
+    private ProgressDialog progressDialog;
+
+
+    private static class MHandler extends Handler{
+
+
+        WeakReference<ScoreFragment> weakReference;
+        public MHandler(ScoreFragment fragment) {
+            super();
+            weakReference = new WeakReference<ScoreFragment>(fragment);
+        }
+
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            assert weakReference !=null;
+            weakReference.get().fetchAvScore();
+        }
+
+
+    }
+
+    public void fetchAvScore() {
+        progressDialog.show();
+        mPresenter.getAvgScore();
+    }
+
+    /**
+     * onAttach()先于onCreate()执行
+     * @param context
+     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ScoreActivity activity = (ScoreActivity) context;
+        mHandler = new MHandler(this);
+        activity.setHandler(mHandler);
+    }
 
 
     @Override
@@ -160,6 +209,10 @@ public class ScoreFragment extends BaseFragment<ScoreContract.View, ScorePresent
         //首次加载时的参数
         refreshParams = 15;
         refreshType = ConstValue.SCORE_TYPE_NEW;
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
         onRefresh();
     }
 
@@ -173,6 +226,7 @@ public class ScoreFragment extends BaseFragment<ScoreContract.View, ScorePresent
 
     @Override
     public void loadScore(List<Score> scoreList) {
+        progressDialog.dismiss();
         swipeRefreshLayout.setRefreshing(false);
         if (!ActivityUtils.NotNullOrEmpty(scoreList)){
             showFailure();
@@ -209,8 +263,18 @@ public class ScoreFragment extends BaseFragment<ScoreContract.View, ScorePresent
     }
 
     @Override
+    public void loadAvgScore(AvgScore score) {
+        progressDialog.dismiss();
+        assert score != null;
+        ScoreStatics statics = score.getValue().get(0);
+        Intent intent = new Intent(getActivity(),ScoreStaticsActivity.class);
+        intent.putExtra(ScoreStaticsActivity.INTENT_SCORE,statics);
+        startActivity(intent);
+    }
+
+    @Override
     public void onRefresh() {
-       mPresenter.getScore(refreshParams,refreshType);
+         mPresenter.getScore(refreshParams,refreshType);
         Log.d(TAG, "onRefresh: " + refreshType +" "+refreshParams);
     }
 

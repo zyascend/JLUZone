@@ -8,12 +8,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zyascend.JLUZone.R;
 import com.zyascend.JLUZone.base.BaseActivity;
 import com.zyascend.JLUZone.base.BaseReAdapter;
 import com.zyascend.JLUZone.entity.EvaluateItem;
+import com.zyascend.JLUZone.utils.view.CustomMessageDialog;
 
 import java.util.List;
 
@@ -41,15 +45,38 @@ public class EvaluateActivity extends BaseActivity<EvaluateContract.View, Evalua
 
     @Override
     protected void doOnCreate() {
-        Log.v("system", "doOnCreate: ");
-        System.out.print('I'+'T');
-        android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(this)
-                .setTitle("注意事项")
-                .setMessage(getString(R.string.evaluate_alarm))
-                .setCancelable(false)
-                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+
+//        android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(this)
+//                .setTitle("注意事项")
+//                .setMessage(getString(R.string.evaluate_alarm))
+//                .setCancelable(false)
+//                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                        swipeRefreshLayout.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                swipeRefreshLayout.setRefreshing(true);
+//                                onRefresh();
+//                            }
+//                        });
+//                    }
+//                }).create();
+//
+//        dialog.show();
+
+        TextView textView = new TextView(this);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        textView.setText(getString(R.string.evaluate_alarm));
+        CustomMessageDialog dialog = new CustomMessageDialog.Builder(this)
+                .setStyle(R.style.CustomDialog)
+                .setTitle("注意：")
+                .setContentView(textView)
+                .removeCancelButton(true)
+                .onPositiveClicked("知道了", new CustomMessageDialog.CustomDialogListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(View v, CustomMessageDialog dialog) {
                         dialog.dismiss();
                         swipeRefreshLayout.post(new Runnable() {
                             @Override
@@ -59,8 +86,8 @@ public class EvaluateActivity extends BaseActivity<EvaluateContract.View, Evalua
                             }
                         });
                     }
-                }).create();
-
+                })
+                .build();
         dialog.show();
     }
 

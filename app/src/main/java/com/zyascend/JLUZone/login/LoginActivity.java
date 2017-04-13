@@ -114,9 +114,9 @@ public class LoginActivity extends BaseActivity<LoginContract.View, LoginPresent
             CbOutside.setChecked(stuInfo.getIsLoginOutside());
             CbRememberPassWord.setChecked(stuInfo.getIsRememberPass());
             //下一次打开自动登录
-            if (stuInfo.getIsAutoLogin()){
-                mPresenter.login(stuInfo);
-            }
+//            if (stuInfo.getIsAutoLogin()){
+//                mPresenter.login(stuInfo);
+//            }
         }
 
     }

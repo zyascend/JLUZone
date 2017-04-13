@@ -12,7 +12,10 @@ import android.view.View;
 
 import com.zyascend.JLUZone.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -61,5 +64,11 @@ public class ActivityUtils {
         intent.setData(Uri.parse(url));
         activity.startActivity(intent);
 
+    }
+
+    public static String getCurrentDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        return formatter.format(curDate);
     }
 }

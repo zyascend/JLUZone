@@ -19,6 +19,7 @@ public interface ScheduleConstract {
         void showLoadTermSuccess(List<Term> terms);
         void showLoadFail(Exception e);
         void showLoadCourseSuccess(List<Course> courses);
+        void showLoadCurrentTerm(int id);
         void shareOK();
         void shareFail();
 
@@ -27,5 +28,7 @@ public interface ScheduleConstract {
         void loadTermList();
         void loadSchedule(int termId,boolean refresh);
         void shareSchedule(HorizontalScrollView scrollView);
+
+        void loadCurrentTerm();
     }
 }

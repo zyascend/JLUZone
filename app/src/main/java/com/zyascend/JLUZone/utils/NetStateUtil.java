@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import com.zyascend.JLUZone.base.BaseApplication;
 
 /**
+ *
  * Created by Administrator on 2017/3/22.
  */
 

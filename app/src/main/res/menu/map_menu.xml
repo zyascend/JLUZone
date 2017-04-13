@@ -4,6 +4,6 @@
     <item
         android:title="切换地图"
         android:id="@+id/action_change_map"
-        android:showAsAction="always"/>
+        app:showAsAction="always"/>
 
 </menu>

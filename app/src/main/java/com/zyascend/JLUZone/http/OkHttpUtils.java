@@ -9,6 +9,7 @@ import com.zyascend.JLUZone.utils.NetStateUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +32,8 @@ import okhttp3.Response;
 public class OkHttpUtils {
 
 
+
+
     private static final int MAX_AGE_DEFAULT = 30;
     private static final int MAX_STALE_DEFAULT = 60 * 60 * 24 * 3; // 没网失效3天
 
@@ -51,7 +54,7 @@ public class OkHttpUtils {
         Cache cache = new Cache(cacheDir,10*1024*1024);
 
         okHttpBuilder = new OkHttpClient.Builder();
-        okHttpBuilder.connectTimeout(20000, TimeUnit.MILLISECONDS);
+        okHttpBuilder.connectTimeout(10000, TimeUnit.MILLISECONDS);
         okHttpBuilder.readTimeout(20000, TimeUnit.MILLISECONDS);
         okHttpBuilder.cookieJar(new CookiesManager());
         okHttpBuilder.cache(cache)

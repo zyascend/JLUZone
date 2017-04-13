@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/video_center_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:layout_centerInParent="true"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 音量view -->
+
+    <TextView
+        android:background="@drawable/bg_center_view"
+        android:visibility="gone"
+        android:id="@+id/tv_video_volume"
+        android:drawableTop="@drawable/src_video_volume_on"
+        android:gravity="center"
+        tools:text="50%"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- 亮度view -->
+    <TextView
+        android:background="@drawable/bg_center_view"
+        android:visibility="gone"
+        android:id="@+id/tv_video_brightness"
+        android:drawableTop="@drawable/src_video_brightness"
+        android:gravity="center"
+        tools:text="50%"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!-- 快进view -->
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_video_forward"
+        android:drawableTop="@drawable/src_video_forward"
+        android:gravity="center"
+        tools:text="50%"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!-- fast forward-->
+
+</FrameLayout>

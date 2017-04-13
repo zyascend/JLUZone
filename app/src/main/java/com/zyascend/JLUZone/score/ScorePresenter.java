@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.zyascend.JLUZone.base.BasePresenter;
+import com.zyascend.JLUZone.entity.AvgScore;
 import com.zyascend.JLUZone.entity.ConstValue;
 import com.zyascend.JLUZone.entity.Score;
 import com.zyascend.JLUZone.entity.ScoreDetail;
@@ -81,6 +82,23 @@ public class ScorePresenter extends BasePresenter<ScoreContract.View>implements 
             List<Score> list = ScoreSortUtils.getInstance().sort(type,scores);
             mViewListener.onSorted(list);
         }
+    }
+
+
+    @Override
+    public void getAvgScore() {
+        mHttpUtils.getAvgScore(this, new HttpManagerListener.AvgScoreCallback() {
+            @Override
+            public void onSuccess(AvgScore avgScore) {
+                mViewListener.loadAvgScore(avgScore);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                assert mViewListener != null;
+                mViewListener.showFailure();
+            }
+        });
     }
 
 

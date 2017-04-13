@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/videoRootView"
+    android:background="@android:color/black"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--播放视频的view-->
+    <tcking.github.com.giraffeplayer.IjkVideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <!--控制播放的View-->
+    <RelativeLayout
+        android:id="@+id/control_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/video_play_view"/>
+        <include layout="@layout/video_bottom_view"/>
+        <include layout="@layout/video_top_view"/>
+
+    </RelativeLayout>
+
+
+    <include layout="@layout/video_center_view"/>
+    <include layout="@layout/video_status_view"/>
+
+    <!--lock view-->
+    <FrameLayout
+        android:id="@+id/fr_video_lock"
+        android:background="@drawable/bg_center_view"
+        android:layout_marginStart="10dp"
+        android:layout_centerVertical="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp">
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/im_video_lock"
+            android:src="@drawable/src_video_unlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+    <!--播放列表view-->
+    <FrameLayout
+        android:visibility="gone"
+        android:background="@drawable/bg_center_view"
+        android:id="@+id/fr_video_playList"
+        android:layout_alignParentEnd="true"
+        android:layout_width="150dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_video_noList"
+            android:visibility="gone"
+            android:text="暂无数据"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ListView
+            android:layout_margin="5dp"
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
+</RelativeLayout>

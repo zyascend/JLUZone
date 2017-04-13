@@ -119,7 +119,6 @@ public class PersistentCookieStore {
         ArrayList<Cookie> ret = new ArrayList<>();
         for (String key : cookies.keySet())
             ret.addAll(cookies.get(key).values());
-
         return ret;
     }
 

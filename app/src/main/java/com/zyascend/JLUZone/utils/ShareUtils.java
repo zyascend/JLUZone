@@ -78,6 +78,7 @@ public class ShareUtils {
         scrollView.draw(canvas);
         return bitmap;
     }
+
     private String saveBitmap(Bitmap bitmap){
         File appDir = new File(Environment.getExternalStorageDirectory(), "知吉");
         if (!appDir.exists()) {
@@ -120,6 +121,18 @@ public class ShareUtils {
         Bitmap bitmap = Bitmap.createBitmap(h,scrollView.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         scrollView.draw(canvas);
+        return bitmap;
+    }
+
+
+    public void shareView(Context context ,View view){
+        share(saveBitmap(getBitmapByNormal(view)),context);
+    }
+
+    private Bitmap getBitmapByNormal(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
         return bitmap;
     }
 

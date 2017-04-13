@@ -61,7 +61,6 @@
         </activity>
         <activity android:name=".main.MainActivity"
             android:theme="@style/AppTheme.TransNav">
-
         </activity>
         <activity android:name=".photo.PhotoActivity"/>
         <activity android:name=".schedule.ScheduleActivity">
@@ -72,6 +71,9 @@
         <activity android:name=".news.NewsContentActivity"/>
         <activity android:name=".share.ShareContentActivity" />
         <activity android:name=".share.ShareScoreActivity"/>
+        <activity android:name=".live.LiveListActivity"/>
+        <activity android:name=".live.LiveActivity"/>
+        <activity android:name=".score.ScoreStaticsActivity"/>
         <!-- Required SDK核心功能-->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"

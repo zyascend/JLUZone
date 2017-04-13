@@ -3,6 +3,7 @@ package com.zyascend.JLUZone.explore;
 import android.view.View;
 
 /**
+ *
  * Created by Administrator on 2016/10/13.
  */
 
@@ -16,5 +17,6 @@ public interface ExploreContract {
         void enterJob();
         void enterPic();
         void enterRate();
+        void enterLive();
     }
 }

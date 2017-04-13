@@ -32,7 +32,7 @@ public class ConstValue {
     public static final int SCORE_TYPE_ALL = 1;
     public static final int SCORE_TYPE_YEAR = 2;
 
-    public static final String JWC_URL = "http://oldjwc.jlu.edu.cn/?file=info&act=list&id=28&page=";
+    public static final String JWC_URL = "http://jwc.jlu.edu.cn/zxzx/ksap.htm";
     public static final String XIAO_URL = "http://oa.jlu.edu.cn/list.asp?s=1&page=";
     public static final String URL_JOB_CONTENT = "http://jdjyw.jlu.edu.cn/index.php?r=app/recruit/details&id=";
 
@@ -79,4 +79,5 @@ public class ConstValue {
     public static final String URL_CHANNEL = "http://202.98.18.57:18080/webservice/m/api/getWebCastList";
 
     public static final String URL_WEATHER = "http://wthrcdn.etouch.cn/weather_mini?citykey=101060101";
+    public static final String CURRENT_TERM = "current_term";
 }

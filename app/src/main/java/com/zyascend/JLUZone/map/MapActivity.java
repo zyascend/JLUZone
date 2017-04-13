@@ -2,6 +2,7 @@ package com.zyascend.JLUZone.map;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Looper;
@@ -13,9 +14,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +45,6 @@ import com.zyascend.JLUZone.R;
 import com.zyascend.JLUZone.base.BaseActivity;
 import com.zyascend.JLUZone.base.BaseReAdapter;
 import com.zyascend.JLUZone.entity.ConstValue;
-import com.zyascend.JLUZone.explore.ExplorePresenter;
 import com.zyascend.JLUZone.utils.mapApi.MapUtils;
 import com.zyascend.JLUZone.utils.mapApi.MyPoiOverlay;
 import com.zyascend.JLUZone.utils.mapApi.PoiOverlay;
@@ -80,10 +83,12 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
     RecyclerView recyclerView;
     RecyclerView destinationView;
     private DestinationAdapter destinationAdapter;
+    private BottomSheetDialog dialog;
 
     @Override
     protected void doOnCreate() {
         mToolbar.setTitle("我的位置");
+        locateSelf();
     }
 
     @Override
@@ -149,7 +154,7 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
     }
 
     private void changeMap(int position) {
-
+        Log.d(TAG, "changeMap: position");
         switch (position){
             case 0:
                 lat = ConstValue.NANLING_LAT;
@@ -175,10 +180,12 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
                 lat = ConstValue.CHAOYANG_LAT;
                 lon = ConstValue.CHAOYANG_LOT;
                 break;
-            default:
-                if (mLocationClient == null) break;
-                mLocationClient.start();
-                break;
+
+
+//            default:
+//                if (mLocationClient == null) break;
+//                mLocationClient.start();
+//                break;
 
         }
         moveCenter();
@@ -201,6 +208,7 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
     }
 
     private void moveCenter() {
+        Log.d(TAG, "moveCenter: ");
         LatLng cenpt = new LatLng(lat,lon);
         //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
@@ -216,6 +224,7 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
 
     @Override
     public void onLocated(double lat, double lon) {
+        Log.d(TAG, "onLocated: lat = "+lat);
         this.lat = lat;
         this.lon = lon;
         //这个判断是为了防止每次定位都重新设置中心点和marker
@@ -265,21 +274,36 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
                 showGotoDialog();
                 break;
             case R.id.fab_locate:
-                if (mLocationClient == null) break;
-                mLocationClient.start();
+                locateSelf();
                 break;
         }
     }
 
+    private void locateSelf() {
+        isFirstLocation = true;
+        if (mLocationClient == null)return;
+        mLocationClient.start();
+    }
+
     private void showGotoDialog() {
-        BottomSheetDialog dialog = new BottomSheetDialog(this);
-        View view = getLayoutInflater().inflate(R.layout.layout_goto, null);
+
+//        Dialog bottomDialog = new Dialog(this, R.style.BottomDialog);
+//        ViewGroup.LayoutParams layoutParams = contentView.getLayoutParams();
+//        layoutParams.width = getResources().getDisplayMetrics().widthPixels;
+//        contentView.setLayoutParams(layoutParams);
+//        bottomDialog.getWindow().setGravity(Gravity.BOTTOM);
+//        bottomDialog.getWindow().setWindowAnimations(R.style.BottomDialog_Animation);
+//        bottomDialog.show();
+
+
+        dialog = new BottomSheetDialog(this);
+        View contentView = getLayoutInflater().inflate(R.layout.layout_goto, null);
         adapter = new GotoAdapter(this);
         adapter.setOnItemClickListener(this);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) contentView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this,3));
         recyclerView.setAdapter(adapter);
-        dialog.setContentView(view);
+        dialog.setContentView(contentView);
         dialog.show();
     }
 
@@ -298,13 +322,14 @@ public class MapActivity extends BaseActivity<MapContract.View, MapPresenter> im
             @Override
             public void run() {
                 Looper.prepare();
-                searchNeayBy(key);
+                searchNearBy(key);
                 Looper.loop();
             }
         }).start();
+        dialog.dismiss();
     }
 
-    private void searchNeayBy(String key) {
+    private void searchNearBy(String key) {
         // POI初始化搜索模块，注册搜索事件监听
         PoiNearbySearchOption poiNearbySearchOption = new PoiNearbySearchOption();
         poiNearbySearchOption.keyword(key);

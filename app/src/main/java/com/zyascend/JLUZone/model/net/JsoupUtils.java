@@ -50,7 +50,7 @@ public class JsoupUtils implements JsoupListener {
         Log.d(TAG, "getJwNews: ");
         mTag = NewsPresenter.TAG_JWC;
         mNewsListCallback = newsCallBack;
-        new NewsListTask().execute(ConstValue.JWC_URL+page);
+        new NewsListTask().execute(ConstValue.JWC_URL);
     }
 
     @Override
@@ -87,11 +87,12 @@ public class JsoupUtils implements JsoupListener {
         protected List<News> doInBackground(String... params) {
             Log.d(TAG, "doInBackground: ");
             List<News> newses = null;
-            if (TextUtils.equals(mTag, NewsPresenter.TAG_JWC)){
-                newses = loadJwcNews(params[0]);
-            }else if(TextUtils.equals(mTag,NewsPresenter.TAG_XIAO)){
-                newses = loadXiaoNews(params[0]);
-            }
+            newses = loadJwcNews(params[0]);
+//            if (TextUtils.equals(mTag, NewsPresenter.TAG_JWC)){
+//
+//            }else if(TextUtils.equals(mTag,NewsPresenter.TAG_XIAO)){
+//                newses = loadXiaoNews(params[0]);
+//            }
 
             return newses;
         }
@@ -153,21 +154,21 @@ public class JsoupUtils implements JsoupListener {
 
             try {
 
-                Document document = Jsoup.connect(param).get();
-                Elements content = document.getElementsByAttributeValue("id","content");
-                Elements ul= content.first().getElementsByTag("ul");
-                Elements li = ul.first().getElementsByTag("li");
+                Document document = Jsoup.connect(ConstValue.JWC_URL).get();
+//                Elements content = document.getElementsByAttributeValue("id","content");
+//                Elements ul= content.first().getElementsByTag("ul");
+                Elements clearFix = document.getElementsByClass("clearfix");
+                Log.d(TAG, "loadJwcNews: clearFix = "+clearFix.toString());
+                Elements li = clearFix.first().getElementsByTag("li");
+                Log.d(TAG, "loadJwcNews: li = "+li.toString());
                 for (Element e : li){
-                    date = e.getElementsByClass("right").text();
-                    title = e.getElementsByTag("a").first().removeClass("new").text();
+                    date = e.getElementsByClass("time").text();
+                    title = e.getElementsByTag("a").first().attr("title");
                     url = e.getElementsByTag("a").first().attr("href");
-                    editor = e.getElementsByClass("dep").get(0).text();
-
                     //处理数据
-                    id = Long.parseLong(url.split("=")[3]);
-                    title = title.replace("new","");
-                    url = "http://oldjwc.jlu.edu.cn/"+url;
-                    editor = editor.replace("(","").replace(")","");
+                    Log.d(TAG, "loadJwcNews: date = "+date+"/n");
+                    Log.d(TAG, "loadJwcNews: title = "+title+"/n");
+                    Log.d(TAG, "loadJwcNews: url = "+url+"/n");
                     //处理date
 
 //                    date = date.replaceAll("\\s","");

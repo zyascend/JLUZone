@@ -51,4 +51,7 @@ public interface DataListener {
 
     List<Term> getTerms();
     void saveTerms(List<Term> terms);
+
+    void saveCurrentTerm(int currentTerm);
+    int getCurrentTerm();
 }

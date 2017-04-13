@@ -9,6 +9,7 @@ import com.zyascend.JLUZone.model.net.HttpManagerListener;
 import java.util.List;
 
 /**
+ *
  * Created by Administrator on 2016/12/5.
  */
 
@@ -29,6 +30,7 @@ public class EvaluatePresenter extends BasePresenter<EvaluateContract.View> impl
             }
             @Override
             public void onFailure(Exception e) {
+                assert mViewListener != null;
                 mViewListener.onFail();
             }
         });
@@ -43,6 +45,7 @@ public class EvaluatePresenter extends BasePresenter<EvaluateContract.View> impl
             }
             @Override
             public void onFailure(Exception e) {
+                assert mViewListener != null;
                 mViewListener.onFail();
             }
         });

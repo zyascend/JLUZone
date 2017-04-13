@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/video_status_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--error view-->
+    <TextView
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/tv_video_error"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:text="出错啦..."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!--loading view-->
+    <ProgressBar
+        android:layout_centerInParent="true"
+        android:id="@+id/pb_video_loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateOnly="true"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>

@@ -1,20 +1,28 @@
 package com.zyascend.JLUZone.schedule;
 
 import android.content.DialogInterface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zyascend.JLUZone.R;
 import com.zyascend.JLUZone.base.BaseActivity;
@@ -23,6 +31,10 @@ import com.zyascend.JLUZone.entity.Term;
 import com.zyascend.JLUZone.model.data.DataUtils;
 import com.zyascend.JLUZone.utils.ActivityUtils;
 import com.zyascend.JLUZone.utils.ShareUtils;
+import com.zyascend.JLUZone.utils.view.CustomMessageDialog;
+import com.zyascend.JLUZone.utils.view.RecyclerDivider;
+
+import org.greenrobot.greendao.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +49,7 @@ import butterknife.Bind;
 public class ScheduleActivity extends BaseActivity<ScheduleConstract.View, SchedulePresenter>
         implements ScheduleConstract.View, AdapterView.OnItemSelectedListener {
     private static final String TAG = "ScheduleActivity";
-    @Bind(R.id.sp_term)
-    AppCompatSpinner spTerm;
+
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
     @Bind(R.id.scroll_horizontal)
@@ -47,24 +58,29 @@ public class ScheduleActivity extends BaseActivity<ScheduleConstract.View, Sched
     ScrollView scrollVertical;
     @Bind(R.id.layout_fail)
     LinearLayout failLayout;
+    @Bind(R.id.spinner)
+    AppCompatSpinner spinner;
 
     private ScheduleAdapter adapter;
     private List<Term> mTermList;
     private Term mCurrentTerm;
     private int mCurrentWeek;
     private boolean isRefresh = false;
+    private int mCurrentTermId;
+    private boolean spinnerShowed = false;
 
 
     @Override
     protected void doOnCreate() {
-        mPresenter.loadTermList();
+        mPresenter.loadCurrentTerm();
     }
 
     @Override
     protected void initView() {
-        setToolbarTitle("课表");
+        setToolbarTitle("我的课表");
         recyclerView.setLayoutManager(new GridLayoutManager(this,7));
-        adapter = new ScheduleAdapter();
+        adapter = new ScheduleAdapter(this);
+        recyclerView.addItemDecoration(new RecyclerDivider(ContextCompat.getDrawable(this,R.drawable.divider)));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -97,6 +113,8 @@ public class ScheduleActivity extends BaseActivity<ScheduleConstract.View, Sched
 
     }
 
+
+
     @Override
     public void showLoadTermSuccess(List<Term> terms) {
         Log.d(TAG, "showLoadTermSuccess: "+ terms.size());
@@ -106,19 +124,34 @@ public class ScheduleActivity extends BaseActivity<ScheduleConstract.View, Sched
             scrollHorizontal.setVisibility(View.INVISIBLE);
             return;
         }
+
         mTermList = terms;
+
+        spinner.setVisibility(View.VISIBLE);
         List<String> termList = new ArrayList<>();
         for (int i = 0; i < terms.size(); i++) {
             termList.add(terms.get(i).getTermName());
         }
-        ArrayAdapter<String> termAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,termList);
-        termAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spTerm.setAdapter(termAdapter);
-        spTerm.setSelection(1);
-        mCurrentTerm = terms.get(1);
-        spTerm.setOnItemSelectedListener(this);
-        generateSchedule();
+
+        // 建立Adapter并且绑定数据源
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,termList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //绑定 Adapter到控件
+        spinner .setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+
+                mCurrentTermId = Integer.parseInt(mTermList.get(pos).getTermId());
+                generateSchedule();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
+
     }
 
     @Override
@@ -135,6 +168,12 @@ public class ScheduleActivity extends BaseActivity<ScheduleConstract.View, Sched
     }
 
     @Override
+    public void showLoadCurrentTerm(int id) {
+        mCurrentTermId = id;
+        generateSchedule();
+    }
+
+    @Override
     public void shareOK() {
 
     }
@@ -147,7 +186,6 @@ public class ScheduleActivity extends BaseActivity<ScheduleConstract.View, Sched
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         mCurrentTerm = mTermList.get(position);
-        spTerm.setSelection(position);
         generateSchedule();
         Log.d(TAG, "onItemSelected: spinner clicked !!!!");
 
@@ -163,7 +201,7 @@ public class ScheduleActivity extends BaseActivity<ScheduleConstract.View, Sched
 
 
     private void generateSchedule() {
-        mPresenter.loadSchedule(Integer.parseInt(mCurrentTerm.getTermId()), isRefresh);
+        mPresenter.loadSchedule(mCurrentTermId, isRefresh);
         isRefresh = true;
     }
 
@@ -174,7 +212,6 @@ public class ScheduleActivity extends BaseActivity<ScheduleConstract.View, Sched
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -183,26 +220,40 @@ public class ScheduleActivity extends BaseActivity<ScheduleConstract.View, Sched
                 break;
             case R.id.action_info:
                 showInfo();
+                break;
+            case R.id.action_change_year:
+                if (spinnerShowed)spinner.setVisibility(View.GONE);
+                else {
+                    mPresenter.loadTermList();
+                    spinnerShowed = true;
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+
     private void showInfo() {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("单双周说明")
-                .setMessage("带有“单双周不同”的课程，单双周的课并不一样，由于技术原因，暂时无法显示，请登录uims.jlu.edu.cn查看详情")
-                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+        TextView textView = new TextView(this);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+        textView.setText(getString(R.string.week_info));
+        final CustomMessageDialog dialog = new CustomMessageDialog.Builder(this)
+                .setStyle(R.style.CustomDialog)
+                .setTitle("注意：")
+                .setContentView(textView)
+                .removeCancelButton(true)
+                .onPositiveClicked("知道了", new CustomMessageDialog.CustomDialogListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(View v, CustomMessageDialog dialog) {
                         dialog.dismiss();
                     }
-                }).create();
+                })
+                .build();
         dialog.show();
     }
 
     private void shareSchedule() {
         //分享课表
         mPresenter.shareSchedule(scrollHorizontal);
-
     }
 }

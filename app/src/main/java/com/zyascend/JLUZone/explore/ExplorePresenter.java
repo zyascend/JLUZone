@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.zyascend.JLUZone.base.BasePresenter;
 import com.zyascend.JLUZone.evaluate.EvaluateActivity;
 import com.zyascend.JLUZone.job.JobActivity;
+import com.zyascend.JLUZone.live.LiveListActivity;
 import com.zyascend.JLUZone.map.MapActivity;
 import com.zyascend.JLUZone.news.NewsActivity;
 import com.zyascend.JLUZone.schedule.ScheduleActivity;
@@ -63,6 +64,12 @@ public class ExplorePresenter extends BasePresenter<ExploreContract.View> implem
     @Override
     public void enterRate() {
         ActivityUtils.enterActivity(mContext, EvaluateActivity.class);
+    }
+
+    @Override
+    public void enterLive() {
+        ActivityUtils.enterActivity(mContext, LiveListActivity.class);
+
     }
 
     public void enterMap(String map) {

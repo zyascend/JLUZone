@@ -1,5 +1,6 @@
 package com.zyascend.JLUZone.score;
 
+import com.zyascend.JLUZone.entity.AvgScore;
 import com.zyascend.JLUZone.entity.Score;
 import com.zyascend.JLUZone.entity.ScoreDetail;
 import com.zyascend.JLUZone.entity.Term;
@@ -16,6 +17,7 @@ public interface ScoreContract {
         void getScore(int params,int type);
         void getScoreDetail(String asId);
         void sort(int type,List<Score> scores);
+        void getAvgScore();
     }
 
     interface View {
@@ -23,5 +25,6 @@ public interface ScoreContract {
         void showFailure();
         void loadScoreDetail(ScoreDetail detail);
         void onSorted(List<Score> scores);
+        void loadAvgScore(AvgScore score);
     }
 }
