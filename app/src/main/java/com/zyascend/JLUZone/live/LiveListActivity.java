@@ -70,6 +70,7 @@ public class LiveListActivity extends BaseActivity<LiveContract.View, LivePresen
 
     }
 
+
     @Override
     public void onGetChannelList(List<LiveChannel> channels) {
         if (channels != null && !channels.isEmpty()){
@@ -95,5 +96,7 @@ public class LiveListActivity extends BaseActivity<LiveContract.View, LivePresen
     @Override
     public void onItemClick(int position) {
         // TODO: 2017/3/22
+
+
     }
 }
